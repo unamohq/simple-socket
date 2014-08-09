@@ -1,0 +1,28 @@
+{
+  "name": "simple-socket",
+  "version": "0.0.1",
+  "description": "Simple WebSocket client wrapper supporting reconnection on demand",
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/UsabilityTools/simple-socket.git"
+  },
+  "keywords": [
+    "websocket",
+    "client",
+    "reconnection"
+  ],
+  "author": "Eryk Napierała",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/UsabilityTools/simple-socket/issues"
+  },
+  "homepage": "https://github.com/UsabilityTools/simple-socket",
+  "dependencies": {
+    "extend": "^1.3.0",
+    "queue": "^3.0.4"
+  }
+}
