@@ -5,7 +5,7 @@ module.exports = (function () {
     var queue = require('queue');
     var extend = require('extend');
     
-    var SocketImplementation = require('./web-socket');
+    var SocketImplementation = require('./lib/web-socket');
 
 
     var SimpleSocket = function(options) {
