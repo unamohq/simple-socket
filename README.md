@@ -59,6 +59,6 @@ Simple WebSocket client wrapper supporting reconnection on demand.
   
   // close connection and prevent auto reconnections even if autoReconnect option is enabled
   // when you try to send message after manual disconnection, error event is emitted but message is
-  // queued, so you can connect socket manually by `connect` method
+  // queued, so you can connect socket manually by `connect` method and after that message will be sent to server
   socket.disconnect();
 ```
