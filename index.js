@@ -5,7 +5,7 @@ module.exports = (function () {
     var queue = require('queue');
     var extend = require('extend');
     
-    var SocketImplementation = require('./lib/web-socket');
+    var SocketImplementation = require('./web-socket');
 
 
     var SimpleSocket = function(options) {
@@ -158,20 +158,21 @@ module.exports = (function () {
                     }.bind(this));
                 }
             },
-            message: function (messageString) {
+            message: function (e) {
                 var message;
 
                 try {
-                    message = JSON.parse(messageString);
+                    message = JSON.parse(e.data);
+                    message.type = message.type.toLowerCase();
                 } catch(err) {
                     this.emit('error', 'cannot parse message to JSON', message);
 
                     return false;
                 }
 
-                if(('undefined' !== typeof message.type) && (message.type !== null)) {
+                if(('undefined' !== typeof message.type) && (message.type !== null) && (message.type !== '')) {
                     this.emit('message', message);
-                    this.emit('message_' + message.type.toLowerCase(), message.data);
+                    this.emit('message_' + message.type, message.data);
 
                     return true;
                 } else {
