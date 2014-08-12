@@ -46,7 +46,6 @@ module.exports = (function () {
                 }
 
                 this._disconnected = false; // true if engine is in CLOSED state
-                this._disconnecting = false; // true if disconnect engine is in CLOSING state
                 this._closedManually = false; // true if disconnect method was called
                 this._connected = true; // true if connect method was called
 
@@ -60,9 +59,7 @@ module.exports = (function () {
             return this;
         },
         disconnect: function () {
-            if(!this._disconnected && !this._disconnecting) {
-                this._disconnecting = true;
-
+            if(!this._disconnected && !this._closedManually) {
                 this._closedManually = true;
 
                 this.engine.close();
@@ -182,8 +179,7 @@ module.exports = (function () {
                 }
             },
             close: function(e) {
-                if(this._disconnecting || !this._options.autoReconnect) {
-                    this._disconnecting = false;
+                if(this._closedManually || !this._options.autoReconnect) {
                     this._disconnected = true;
 
                     this.engine = null;
