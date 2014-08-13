@@ -1,8 +1,8 @@
 /*global jasmine, describe, it, beforeEach, afterEach */
 var proxyquire = require('proxyquireify')(require);
 
-var WebSocketMock = require('./mocks/web-socket');
-var webSocketServer = require('./mocks/web-socket-server');
+var WebSocketMock = require('websocket-mock').Client;
+var webSocketServer = require('websocket-mock').server;
 
 var SimpleSocket = proxyquire('../', {
     './lib/web-socket': WebSocketMock
@@ -24,7 +24,7 @@ describe('SimpleSocket instance test', function () {
         simpleSocket = new SimpleSocket();
     });
 
-    // disconnect after each test
+    // clear after each test (it's not connected)
     afterEach(function () {
         simpleSocket = null;
     });
@@ -34,7 +34,6 @@ describe('SimpleSocket instance test', function () {
         expect(simpleSocket instanceof SimpleSocket).toBeTruthy();
         expect(typeof simpleSocket).toBe('object');
         
-        expect(typeof simpleSocket).toBe('object');
         expect(typeof simpleSocket.connect).toBe('function');
         expect(typeof simpleSocket.disconnect).toBe('function');
         expect(typeof simpleSocket.isConnected).toBe('function');
