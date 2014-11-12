@@ -3,6 +3,7 @@ module.exports = function (grunt) {
     grunt.registerTask('default', [ 'test:dist' ]);
 
     grunt.registerMultiTask('test', simpleMultiTaskRunner);
+    grunt.registerMultiTask('build', simpleMultiTaskRunner);
 
 
     grunt.initConfig({
@@ -19,6 +20,10 @@ module.exports = function (grunt) {
                     main: 'index.js'
                 }
             },
+            dist: {
+                dir: 'dist',
+                bundle: 'dist/<%= pkg.name %>.bundle.js'
+            },
             spec: {
                 dir: 'test',
                 bundle: 'test/<%= pkg.name %>.bundle.js',
@@ -26,6 +31,7 @@ module.exports = function (grunt) {
             }
         },
         clean: {
+            dev: [ '<%= config.dist.bundle %>' ],
             test: [ '<%= config.spec.bundle %>' ]
         },
         test: {
@@ -43,6 +49,14 @@ module.exports = function (grunt) {
                 'browserify:test-dist',
                 'karma:unit',
                 'clean:test'
+            ]
+        },
+        build: {
+            dist: [
+                'clean:test',
+                'jshint',
+                'browserify:dist',
+                'uglify:dist'
             ]
         },
         browserify: {
@@ -65,6 +79,15 @@ module.exports = function (grunt) {
                     src: '<%= config.spec.files %>',
                     dest: '<%= config.spec.bundle %>'
                 }]
+            },
+            'dist': {
+                options: {
+                    transform: [ 'uglifyify' ]
+                },
+                files: [{
+                    src: '<%= config.src.js.main %>',
+                    dest: '<%= config.dist.bundle %>'
+                }]
             }
         },
         watch: {
@@ -85,6 +108,12 @@ module.exports = function (grunt) {
                 'gruntfile.js',
                 '<%= config.src.js.files %>'
             ]
+        },
+        uglify: {
+            dist: {
+                src: '<%= config.dist.bundle %>',
+                dest: '<%= config.dist.bundle %>'
+            }
         },
         karma: {
             unit: {
