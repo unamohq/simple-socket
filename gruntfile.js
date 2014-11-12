@@ -82,7 +82,10 @@ module.exports = function (grunt) {
             },
             'dist': {
                 options: {
-                    transform: [ 'uglifyify' ]
+                    plugin: [ ], // no proxyquire
+                    browserifyOptions: {
+                        standalone: 'SimpleSocket'
+                    }
                 },
                 files: [{
                     src: '<%= config.src.js.main %>',

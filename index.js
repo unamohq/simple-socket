@@ -8,7 +8,7 @@ module.exports = (function () {
     var SocketImplementation = require('./lib/web-socket');
 
 
-    var SimpleSocket = function(options) {
+    function SimpleSocket(options) {
         EventEmitter.prototype.constructor.call(this);
 
         this._queue = queue({
@@ -28,7 +28,7 @@ module.exports = (function () {
         if(this._options.autoConnect) {
             this.connect(this.url);
         }
-    };
+    }
 
     SimpleSocket.supported = !!SocketImplementation;
 
