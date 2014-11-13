@@ -4,7 +4,7 @@ module.exports = (function () {
     var EventEmitter = require('events').EventEmitter;
     var queue = require('queue');
     var extend = require('extend');
-    
+
     var SocketImplementation = require('./lib/web-socket');
 
 
@@ -17,6 +17,7 @@ module.exports = (function () {
         });
 
         this.engine = null;
+        this._connecting = false;
         this._disconnected = true;
         this._options = extend({
             autoConnect: false, // connect automatically when instance is created
@@ -89,15 +90,15 @@ module.exports = (function () {
                 this._queue.push(this.send.bind(this, message));
 
                 if(this._connected) {
-                    if(this._options.autoReconnect && !this._closedManually) {
-                        this._reconnect();   
+                    if(this._options.autoReconnect && !this._closedManually && !this._connecting) {
+                        this._reconnect();
                     } else {
                         this.emit('error', 'try to send a message but socket was closed manually or is disconnected and autoReconnect option is not enabled');
 
                         return false;
                     }
                 } else {
-                    this.emit('error', 'try to send a message but socket has never been connected');    
+                    this.emit('error', 'try to send a message but socket has never been connected');
                 }
             }
 
@@ -130,6 +131,8 @@ module.exports = (function () {
                 return this.emit('error', err);
             }
 
+            this._connecting = true; // true if _createSocket method was called but open handler was not
+
             this.engine.addEventListener('open', this._engineHandlers.open.bind(this));
             this.engine.addEventListener('message', this._engineHandlers.message.bind(this));
             this.engine.addEventListener('error', this._engineHandlers.error.bind(this));
@@ -148,6 +151,8 @@ module.exports = (function () {
 
                         this._reconnecting = false;
                     }
+
+                    this._connecting = false;
 
                     // flush queue in next tick to allow sending some initial message on connect / reconnect
                     process.nextTick(function() {
