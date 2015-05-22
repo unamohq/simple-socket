@@ -48,6 +48,11 @@ Simple WebSocket client wrapper supporting reconnection on demand. Requires Brow
     // you can send some init message here, it will be pushed to server before all queued messages
   });
   
+  socket.on('diconnect', function() {
+    // socket is disconnected now
+    // if autoReconnect option is on, all messages will be buffered in RAM until connection is estabilished
+  });
+  
   socket.on('reconnect', function() {
     // socket is connected after disconnection (caused by server timeout or something)
     // you can send some init message here, it will be pushed to server before all queued messages
