@@ -188,9 +188,9 @@ module.exports = (function () {
                     this._disconnected = true;
 
                     this.engine = null;
-
-                    this.emit('disconnect', e);
                 }
+                
+                this.emit('disconnect', e);
             },
             error: function (err) {
                 this.emit('error', err);
