@@ -1,6 +1,6 @@
 {
   "name": "simple-socket",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Simple WebSocket client wrapper supporting reconnection on demand",
   "main": "index.js",
   "scripts": {
