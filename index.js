@@ -79,13 +79,17 @@ module.exports = (function () {
             try {
                 messageString = JSON.stringify(message);
             } catch(err) {
-                this.emit('error', 'cannot parse message to JSON');
+                this.emit('error', 'cannot parse message to JSON', message, err);
 
                 return false;
             }
 
             if (this.isConnected()) {
-                this.engine.send(messageString);
+                try {
+                    this.engine.send(messageString);
+                } catch (err) {
+                    this.emit('error', 'cannot send a message to the socket', message, err);
+                }
             } else {
                 this._queue.push(this.send.bind(this, message));
 
@@ -93,12 +97,12 @@ module.exports = (function () {
                     if(this._options.autoReconnect && !this._closedManually && !this._connecting) {
                         this._reconnect();
                     } else {
-                        this.emit('error', 'try to send a message but socket was closed manually or is disconnected and autoReconnect option is not enabled');
+                        this.emit('error', 'try to send a message but socket was closed manually or is disconnected and autoReconnect option is not enabled', message);
 
                         return false;
                     }
                 } else {
-                    this.emit('error', 'try to send a message but socket has never been connected');
+                    this.emit('error', 'try to send a message but socket has never been connected', message);
                 }
             }
 
@@ -167,7 +171,7 @@ module.exports = (function () {
                     message = JSON.parse(e.data);
                     message.type = message.type.toLowerCase();
                 } catch(err) {
-                    this.emit('error', 'cannot parse message to JSON', message);
+                    this.emit('error', 'cannot parse message to JSON', message, err);
 
                     return false;
                 }
