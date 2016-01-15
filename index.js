@@ -1,6 +1,6 @@
 module.exports = (function () {
 
-    var util = require('util');
+    var inherits = require('inherits');
     var EventEmitter = require('events').EventEmitter;
     var queue = require('queue');
     var extend = require('extend');
@@ -33,7 +33,7 @@ module.exports = (function () {
 
     SimpleSocket.supported = !!SocketImplementation;
 
-    util.inherits(SimpleSocket, EventEmitter);
+    inherits(SimpleSocket, EventEmitter);
 
     extend(SimpleSocket.prototype, {
         connect: function(url) {
